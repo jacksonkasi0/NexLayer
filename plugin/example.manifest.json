@@ -1,0 +1,10 @@
+{
+  "name": "NextLayer",
+  "id": "xxxxxxx",
+  "api": "1.0.0",
+  "main": "build/main.js",
+  "ui": "build/ui.js",
+  "editorType": ["figma", "figjam"],
+  "networkAccess": { "allowedDomains": ["none"] },
+  "documentAccess": "dynamic-page"
+}
