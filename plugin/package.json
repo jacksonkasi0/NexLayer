@@ -9,16 +9,18 @@
     "@create-figma-plugin/tsconfig": "^3.2.1",
     "@figma/plugin-typings": "1.100.2",
     "concurrently": ">=8",
+    "prettier": "^3.3.3",
     "tailwindcss": ">=3",
     "typescript": ">=4"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
-    "build:css": "tailwindcss --input ./src/input.css --output ./src/output.css",
+    "build": "pnpm run build:css && pnpm run build:js",
+    "build:css": "tailwindcss --input ./src/styles/input.css --output ./src/styles/output.css",
     "build:js": "build-figma-plugin --typecheck --minify",
-    "watch": "npm run build:css && concurrently npm:watch:css npm:watch:js",
-    "watch:css": "tailwindcss --input ./src/input.css --output ./src/output.css --watch",
-    "watch:js": "build-figma-plugin --typecheck --watch"
+    "dev": "pnpm run build:css && concurrently pnpm:watch:css pnpm:watch:js",
+    "watch:css": "tailwindcss --input ./src/styles/input.css --output ./src/styles/output.css --watch",
+    "watch:js": "build-figma-plugin --typecheck --watch",
+    "prettier:format": "npx prettier --write 'src/**/*.{js,jsx,ts,tsx,css,json}'"
   },
   "figma-plugin": {
     "editorType": [
