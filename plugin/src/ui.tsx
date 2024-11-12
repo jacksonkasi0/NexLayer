@@ -1,17 +1,34 @@
-import { render } from '@create-figma-plugin/ui'
-import { h } from 'preact'
+import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 
-// ** import pages & style
-// import Root from '@/pages';
+// ** import figma utils & ui
+import { on } from '@create-figma-plugin/utilities';
+import { render } from '@create-figma-plugin/ui';
+
+// ** import pages & styles
+import Root from '@/pages';
 import '!./styles/output.css';
 
+// ** import hooks
+import { useLayerStructureStore } from '@/store/use-layer-structure-store';
 
-function Plugin () {
-  return (
-    <h1 class="text-3xl font-bold underline">
-      Hello, World!
-    </h1>
-  )
+// ** import types
+import { LayerData } from '@/types/layer';
+import { FetchLayerStructureHandler } from '@/types/events';
+
+function Plugin() {
+  const { setLayerStructure, setLayerCount, resetSelection } = useLayerStructureStore();
+
+  // Listen for layer structure updates
+  useEffect(() => {
+    on<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', (layerData: LayerData[]) => {
+      setLayerStructure(layerData);
+      setLayerCount(layerData.length);
+      resetSelection();
+    });
+  }, [setLayerStructure, setLayerCount, resetSelection]);
+
+  return <Root />;
 }
 
-export default render(Plugin)
+export default render(Plugin);
