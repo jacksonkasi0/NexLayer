@@ -5,44 +5,62 @@ export async function fetchLayerStructure(nodes: ReadonlyArray<SceneNode>): Prom
   const layers: LayerData[] = [];
 
   for (const node of nodes) {
-    const layerData = await getLayerData(node);
-    layers.push(layerData);
+    try {
+      const layerData = await getLayerData(node);
+      layers.push(layerData);
+    } catch (error) {
+      console.error(`Error fetching layer data for node ${node.id}:`, error);
+    }
   }
 
   return { layers };
 }
 
 async function getLayerData(node: SceneNode): Promise<LayerData> {
-  const layerData: LayerData = {
-    id: node.id,
-    n: node.name,
-    t: node.type,
-    hi: node.parent ? buildHierarchyPath(node) : node.id,
-    w: node.width,
-    h: node.height,
-  };
+  try {
+    const layerData: LayerData = {
+      id: node.id,
+      n: node.name,
+      t: node.type,
+      hi: node.parent ? buildHierarchyPath(node) : node.id,
+      w: node.width,
+      h: node.height,
+    };
 
-  if ('characters' in node) {
-    layerData.tx = node.characters; // Text content if the node has text
-    layerData.fs = node.fontSize as number;
-  }
-
-  if ('children' in node) {
-    layerData.children = [];
-    for (const child of node.children) {
-      layerData.children.push(await getLayerData(child));
+    if ('characters' in node) {
+      layerData.tx = node.characters; // Text content if the node has text
+      layerData.fs = node.fontSize as number;
     }
-  }
 
-  return layerData;
+    if ('children' in node) {
+      layerData.children = [];
+      for (const child of node.children) {
+        try {
+          layerData.children.push(await getLayerData(child));
+        } catch (error) {
+          console.error(`Error fetching child layer data for node ${child.id}:`, error);
+        }
+      }
+    }
+
+    return layerData;
+  } catch (error) {
+    console.error(`Error processing layer data for node ${node.id}:`, error);
+    throw error; // Re-throw to ensure parent calls handle errors as needed
+  }
 }
 
 function buildHierarchyPath(node: SceneNode): string {
-  const path = [];
-  let currentNode: SceneNode | null = node;
-  while (currentNode) {
-    path.unshift(currentNode.id);
-    currentNode = currentNode.parent as SceneNode | null;
+  try {
+    const path = [];
+    let currentNode: SceneNode | null = node;
+    while (currentNode) {
+      path.unshift(currentNode.id);
+      currentNode = currentNode.parent as SceneNode | null;
+    }
+    return path.join(' > ');
+  } catch (error) {
+    console.error('Error building hierarchy path:', error);
+    return '';
   }
-  return path.join(' > ');
 }
