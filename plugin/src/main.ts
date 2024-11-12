@@ -40,7 +40,6 @@ on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
 
   figma.notify(message, options);
 });
-
 /**
  * Fetch layer structure and emit JSON structure with error handling
  */
@@ -52,25 +51,14 @@ const fetchAndEmitLayerStructure = async () => {
     emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', layerStructure);
   } catch (error) {
     console.error("Error fetching layer structure:", error);
-    notify.error("Failed to fetch layer structure. Check console for details.");
+    notify.error("✘ Failed to fetch layer structure.");
   }
 };
 
-
 // Initial fetch and emit
-try {
-  void fetchAndEmitLayerStructure();
-} catch (error) {
-  console.error('Initial fetch error:', error);
-  notify.error('An error occurred during the initial fetch. Please try again.');
-}
+void fetchAndEmitLayerStructure();
 
 // Listener for selection changes with error handling
 figma.on('selectionchange', async () => {
-  try {
-    await fetchAndEmitLayerStructure();
-  } catch (error) {
-    console.error('Error on selection change:', error);
-    notify.error('An error occurred on selection change. Please try again.');
-  }
+  await fetchAndEmitLayerStructure();
 });
