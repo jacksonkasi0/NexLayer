@@ -51,7 +51,7 @@ const fetchAndEmitLayerStructure = async () => {
     emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', layerStructure);
   } catch (error) {
     console.error("Error fetching layer structure:", error);
-    notify.error("✘ Failed to fetch layer structure.");
+    figma.notify("✘ Failed to fetch layer structure.", { error: true });
   }
 };
 
