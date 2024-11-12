@@ -21,9 +21,9 @@ function Plugin() {
 
   // Listen for layer structure updates
   useEffect(() => {
-    on<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', (layerData: LayerData[]) => {
-      setLayerStructure(layerData);
-      setLayerCount(layerData.length);
+    on<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', ({ layers }: { layers: LayerData[] }) => {
+      setLayerStructure(layers);
+      setLayerCount(layers.length);
       resetSelection();
     });
   }, [setLayerStructure, setLayerCount, resetSelection]);
