@@ -27,7 +27,7 @@ function Plugin() {
   // Listen for layer structure updates
   useEffect(() => {
     on<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', ({ layers }: { layers: LayerData[] }) => {
-      console.log("count:", countLayers(layers))
+      // console.log("count:", countLayers(layers))
       setLayerStructure(layers);
       setLayerCount(countLayers(layers)); // Use the recursive count
       resetSelection();
