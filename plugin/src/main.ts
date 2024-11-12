@@ -40,6 +40,7 @@ on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
 
   figma.notify(message, options);
 });
+
 /**
  * Fetch layer structure and emit JSON structure with error handling
  */
@@ -48,7 +49,7 @@ const fetchAndEmitLayerStructure = async () => {
   try {
     const layerStructure = await fetchLayerStructure(selectedNodes);
     console.log("Layer structure:", layerStructure); // Debug log
-    emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', layerStructure);
+    emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', JSON.parse(JSON.stringify(layerStructure)));
   } catch (error) {
     console.error("Error fetching layer structure:", error);
     figma.notify("✘ Failed to fetch layer structure.", { error: true });
