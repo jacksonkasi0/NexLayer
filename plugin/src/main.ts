@@ -26,5 +26,6 @@ const fetchAndEmitLayerStructure = async () => {
 void fetchAndEmitLayerStructure();
 
 figma.on('selectionchange', async () => {
+  console.log('trigger - selectionchange')
   await fetchAndEmitLayerStructure();
 });
