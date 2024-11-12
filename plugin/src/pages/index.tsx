@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
 
 // ** import store
 import { useLayerStructureStore } from '@/store/use-layer-structure-store';
@@ -9,10 +8,6 @@ import LayerItem from '@/components/layer-item';
 
 const Root = () => {
   const { layerStructure, layerCount } = useLayerStructureStore();
-
-  useEffect(() => {
-    console.log('Layer Structure Updated:', layerStructure);
-  }, [layerStructure]);
 
   return (
     <div className="p-4 space-y-4">

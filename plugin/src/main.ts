@@ -48,7 +48,6 @@ const fetchAndEmitLayerStructure = async () => {
   const selectedNodes = figma.currentPage.selection;
   try {
     const layerStructure = await fetchLayerStructure(selectedNodes);
-    console.log("Layer structure:", layerStructure); // Debug log
     emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', JSON.parse(JSON.stringify(layerStructure)));
   } catch (error) {
     console.error("Error fetching layer structure:", error);
