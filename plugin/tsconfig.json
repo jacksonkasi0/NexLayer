@@ -1,7 +1,19 @@
 {
   "extends": "@create-figma-plugin/tsconfig",
   "compilerOptions": {
-    "typeRoots": ["node_modules/@figma", "node_modules/@types"]
+    "jsx": "react",
+    "lib": ["DOM", "ESNext"],
+    "typeRoots": ["node_modules/@figma", "node_modules/@types"],
+    "paths": {
+      "@/*": ["./src/*"],
+      "react": ["./node_modules/preact/compat"],
+      "react-dom": ["./node_modules/preact/compat"]
+    },
+    "skipLibCheck": true,
+    "sourceMap": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "typings/**/*.d.ts"],
+
+  "exclude": ["node_modules", "dist", "temp"]
+
 }
