@@ -1,5 +1,5 @@
 // ** import figma utils
-import { emit, showUI } from '@create-figma-plugin/utilities';
+import { emit, on, showUI } from '@create-figma-plugin/utilities';
 
 // ** import handlers
 import { fetchLayerStructure } from '@/core/handlers/fetch-layer-structure-handler';
@@ -8,7 +8,7 @@ import { fetchLayerStructure } from '@/core/handlers/fetch-layer-structure-handl
 import notify from '@/lib/notify';
 
 // ** import types
-import { FetchLayerStructureHandler } from '@/types/events';
+import { FetchLayerStructureHandler, NotificationHandler } from '@/types/events';
 
 
 export default function () {
@@ -17,6 +17,29 @@ export default function () {
     width: 320,
   });
 }
+
+// ** Notification handler **
+on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
+  let options: NotificationOptions = { timeout };
+
+  switch (type) {
+    case 'success':
+      message = `✔️ ${message}`;
+      break;
+    case 'warn':
+      message = `⚠️ ${message}`;
+      break;
+    case 'error':
+      message = `✘ ${message}`;
+      options.error = true; // Use Figma's error style
+      break;
+    case 'loading':
+      message = `⏳ ${message}`;
+      break;
+  }
+
+  figma.notify(message, options);
+});
 
 /**
  * Fetch layer structure and emit JSON structure with error handling
