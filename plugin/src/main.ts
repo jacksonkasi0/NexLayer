@@ -15,17 +15,34 @@ export default function () {
 }
 
 /**
- * Fetch layer structure and emit JSON structure
+ * Fetch layer structure and emit JSON structure with error handling
  */
 const fetchAndEmitLayerStructure = async () => {
-  const selectedNodes = figma.currentPage.selection;
-  const layerStructure = await fetchLayerStructure(selectedNodes);
-  emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', layerStructure);
+  try {
+    const selectedNodes = figma.currentPage.selection;
+    const layerStructure = await fetchLayerStructure(selectedNodes);
+    emit<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', layerStructure);
+  } catch (error) {
+    console.error('Error fetching layer structure:', error);
+    figma.notify('An error occurred while fetching layer structure. Please try again.');
+  }
 };
 
-void fetchAndEmitLayerStructure();
+// Initial fetch and emit
+try {
+  void fetchAndEmitLayerStructure();
+} catch (error) {
+  console.error('Initial fetch error:', error);
+  figma.notify('An error occurred during the initial fetch. Please try again.');
+}
 
+// Listener for selection changes with error handling
 figma.on('selectionchange', async () => {
-  console.log('trigger - selectionchange')
-  await fetchAndEmitLayerStructure();
+  try {
+    console.log('trigger - selectionchange');
+    await fetchAndEmitLayerStructure();
+  } catch (error) {
+    console.error('Error on selection change:', error);
+    figma.notify('An error occurred on selection change. Please try again.');
+  }
 });
