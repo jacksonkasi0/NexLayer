@@ -12,6 +12,10 @@ import { layerCount, layerStructure } from '@/store/use-layer-structure-store';
 // ** import lib
 import notify from '@/lib/notify';
 
+// ** import types & enums
+import { FetchImageTrigger } from '@/types/enums';
+import { ExportCompleteHandler, FetchImageHandler } from '@/types/events';
+
 const Page = () => {
   const count = useStore(layerCount);
   const layers = useStore(layerStructure);
@@ -33,7 +37,7 @@ const Page = () => {
     }
     const parentLayerId = layers[0]?.id; // Take the ID of the first (parent) layer in layers
     if (parentLayerId) {
-      emit('FETCH_IMAGE', parentLayerId); // Emit request to export the selected node by parent ID
+      emit<FetchImageHandler>('FETCH_IMAGE', parentLayerId, FetchImageTrigger.GenerateContext); // Emit request to export the selected node by parent ID
     } else {
       notify.warn("No parent layer found.");
     }
@@ -44,14 +48,26 @@ const Page = () => {
       notify.warn("No layers selected for renaming. Please select a layer.");
       return;
     }
-    console.log("Rename Layer clicked");
+
+    if (contextValue) {
+      console.log("Rename Layer clicked");
+    } else {
+      const parentLayerId = layers[0]?.id;
+      if (parentLayerId) {
+        emit<FetchImageHandler>('FETCH_IMAGE', parentLayerId, FetchImageTrigger.RenameLayer);
+      }
+    }
   }
 
-  // ** Listen for received image data
+  // ** Listen for received image data, then log message if handleRenameLayer was triggered without context
   useEffect(() => {
-    on('RECEIVE_IMAGE', (imageData) => {
+    on<ExportCompleteHandler>('RECEIVE_IMAGE', (imageData, trigger) => {
       console.log("Received image data:", imageData); // Log received image data
-      // Additional handling for the received image can be done here
+      if (trigger === FetchImageTrigger.RenameLayer) {
+        console.log("Rename Layer clicked");
+      } else {
+        console.log("Auto Generate Context clicked");
+      }
     });
   }, []);
 

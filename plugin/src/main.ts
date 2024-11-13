@@ -6,7 +6,7 @@ import { fetchLayerStructure } from '@/core/fetch-layer-structure-handler';
 import { exportSelectedNode } from '@/core/export-selected-node';
 
 // ** import types
-import { FetchLayerStructureHandler, NotificationHandler } from '@/types/events';
+import { FetchImageHandler, FetchLayerStructureHandler, NotificationHandler } from '@/types/events';
 
 
 export default function () {
@@ -15,7 +15,6 @@ export default function () {
     width: 320,
   });
 }
-
 
 /**
  * Fetch layer structure and emit JSON structure with error handling
@@ -65,6 +64,6 @@ on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
 
 
 // ** Image Export Handler **
-on('FETCH_IMAGE', async (nodeId: string) => {
-  await exportSelectedNode(nodeId); // Trigger image export
+on<FetchImageHandler>('FETCH_IMAGE', async (nodeId, trigger) => {
+  await exportSelectedNode(nodeId, trigger);  // Trigger image export
 });
