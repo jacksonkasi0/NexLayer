@@ -6,7 +6,7 @@ import { emit, on } from '@create-figma-plugin/utilities';
 import { render } from '@create-figma-plugin/ui';
 
 // ** import pages & styles
-import Root from '@/pages';
+import Page from '@/pages';
 import '!./styles/output.css';
 
 // ** import store
@@ -30,7 +30,7 @@ function Plugin() {
     });
   }, []);
 
-  return <Root />;
+  return <Page />;
 }
 
 export default render(Plugin);
