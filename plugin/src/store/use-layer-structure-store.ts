@@ -1,5 +1,3 @@
-// src/store/use-layer-structure-store.ts
-
 import { atom } from 'nanostores';
 import { LayerData } from '@/types/layer';
 
