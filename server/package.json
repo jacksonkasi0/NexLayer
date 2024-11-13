@@ -1,13 +1,14 @@
 {
-  "name": "encore-ts-starter",
+  "name": "nextlayer-server",
   "private": true,
   "version": "0.0.1",
-  "description": "Encore Typescript Starter",
+  "description": "NextLayer server",
   "license": "MPL-2.0",
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "dev": "encore run"
+    "dev": "encore run",
+    "build": "encore build docker nextlayer-server:latest"
   },
   "devDependencies": {
     "@types/node": "^20.5.7",
