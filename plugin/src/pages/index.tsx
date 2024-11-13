@@ -1,12 +1,15 @@
 import { h } from 'preact';
 import { useState, useRef } from 'preact/hooks';
 
+// ** import figma utilities & UI components
+import { Button, Container, Stack, Text, TextboxMultiline, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
+
 // ** import store & hooks
 import { useStore } from '@nanostores/preact';
 import { layerCount } from '@/store/use-layer-structure-store';
 
-// ** import figma utilities & UI components
-import { Button, Container, Stack, Text, TextboxMultiline, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
+// ** import lib
+import notify from '@/lib/notify';
 
 const Page = () => {
   const count = useStore(layerCount);
@@ -27,16 +30,20 @@ const Page = () => {
   }
 
   function handleRenameLayer() {
+    if (count === 0) {
+      notify.warn("No layers selected for renaming. Please select a layer.");
+      return;
+    }
     console.log("Rename Layer clicked");
     // Placeholder for actual layer renaming functionality
   }
 
   return (
-    <Container space='small' >
+    <Container space='small'>
       <VerticalSpace space='extraSmall' />
       <Stack space='medium'>
         <Stack space='extraSmall'>
-          <Text >Context (optional)</Text>
+          <Text>Context (optional)</Text>
           <TextboxMultiline
             ref={textareaRef}
             onInput={handleInput}
@@ -53,7 +60,7 @@ const Page = () => {
         </Button>
 
         <Button fullWidth onClick={handleRenameLayer}>
-          Rename {count} Layer
+          Rename {count} Layer{count !== 1 ? 's' : ''}
         </Button>
       </Stack>
     </Container>
