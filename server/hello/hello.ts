@@ -15,7 +15,7 @@ import { api } from "encore.dev/api";
 export const get = api(
   { expose: true, method: "GET", path: "/hello/:name" },
   async ({ name }: { name: string }): Promise<Response> => {
-    const msg = `Hello ${name}!`;
+    const msg = `Hello ${name}! Jack`;
     return { message: msg };
   }
 );
