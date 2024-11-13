@@ -1,18 +1,20 @@
 import { h } from 'preact';
-import { useState, useRef } from 'preact/hooks';
+import { useState, useRef, useEffect } from 'preact/hooks';
 
 // ** import figma utilities & UI components
+import { emit, on } from '@create-figma-plugin/utilities';
 import { Button, Container, Stack, Text, TextboxMultiline, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
 
 // ** import store & hooks
 import { useStore } from '@nanostores/preact';
-import { layerCount } from '@/store/use-layer-structure-store';
+import { layerCount, layerStructure } from '@/store/use-layer-structure-store';
 
 // ** import lib
 import notify from '@/lib/notify';
 
 const Page = () => {
   const count = useStore(layerCount);
+  const layers = useStore(layerStructure);
 
   const [contextValue, setContextValue] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -25,8 +27,16 @@ const Page = () => {
   }
 
   function handleGenerateContext() {
-    console.log("Generate Context clicked");
-    // Placeholder for actual context generation functionality
+    if (count === 0) {
+      notify.warn("No layers selected for context generation. Please select a layer.");
+      return;
+    }
+    const parentLayerId = layers[0]?.id; // Take the ID of the first (parent) layer in layers
+    if (parentLayerId) {
+      emit('FETCH_IMAGE', parentLayerId); // Emit request to export the selected node by parent ID
+    } else {
+      notify.warn("No parent layer found.");
+    }
   }
 
   function handleRenameLayer() {
@@ -35,8 +45,15 @@ const Page = () => {
       return;
     }
     console.log("Rename Layer clicked");
-    // Placeholder for actual layer renaming functionality
   }
+
+  // ** Listen for received image data
+  useEffect(() => {
+    on('RECEIVE_IMAGE', (imageData) => {
+      console.log("Received image data:", imageData); // Log received image data
+      // Additional handling for the received image can be done here
+    });
+  }, []);
 
   return (
     <Container space='small'>
