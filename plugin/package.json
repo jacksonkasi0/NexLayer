@@ -2,6 +2,8 @@
   "dependencies": {
     "@create-figma-plugin/ui": "^3.2.1",
     "@create-figma-plugin/utilities": "^3.2.1",
+    "@nanostores/preact": "^0.5.2",
+    "nanostores": "^0.11.3",
     "preact": ">=10",
     "zustand": "^5.0.1"
   },

@@ -9,8 +9,8 @@ import { render } from '@create-figma-plugin/ui';
 import Root from '@/pages';
 import '!./styles/output.css';
 
-// ** import hooks
-import { useLayerStructureStore } from '@/store/use-layer-structure-store';
+// ** import store
+import { layerStructure, layerCount } from '@/store/use-layer-structure-store';
 
 // ** import lib
 import { countLayers } from '@/lib/count-layer';
@@ -21,16 +21,14 @@ import { FetchLayerStructureHandler } from '@/types/events';
 
 
 function Plugin() {
-  const { setLayerStructure, setLayerCount, resetSelection } = useLayerStructureStore();
-
+  
   // Listen for layer structure updates
   useEffect(() => {
     on<FetchLayerStructureHandler>('FETCH_LAYER_STRUCTURE', ({ layers }: { layers: LayerData[] }) => {
-      setLayerStructure(layers);
-      setLayerCount(countLayers(layers)); // Use the recursive count
-      resetSelection();
+      layerStructure.set(layers);
+      layerCount.set(countLayers(layers));
     });
-  }, [setLayerStructure, setLayerCount, resetSelection]);
+  }, []);
 
   return <Root />;
 }
