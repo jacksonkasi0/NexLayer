@@ -4,9 +4,6 @@ import { emit, on, showUI } from '@create-figma-plugin/utilities';
 // ** import handlers
 import { fetchLayerStructure } from '@/core/handlers/fetch-layer-structure-handler';
 
-// ** import lib
-import notify from '@/lib/notify';
-
 // ** import types
 import { FetchLayerStructureHandler, NotificationHandler } from '@/types/events';
 
