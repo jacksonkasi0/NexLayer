@@ -1,7 +1,7 @@
 {
   "tasks": {
     "dev": "deno serve --allow-import --allow-write main.ts",
-    "deploy": "denoflare push main.ts"
+    "deploy": "denoflare push main"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
