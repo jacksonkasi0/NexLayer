@@ -66,7 +66,7 @@ export const renameLayersUsingAI = async (input: RenameLayersInput): Promise<Ren
 
         try {
             const completion = await client.chat.completions.create({
-                model: "Meta-Llama-3.1-405B-Instruct",
+                model: "Meta-Llama-3.1-8B-Instruct",
                 messages: [{ role: "user", content: prompt }],
             });
 
