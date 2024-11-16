@@ -1,7 +1,12 @@
-import { Hono } from '@hono/hono'
+import { Hono } from "@hono/hono";
 
-const app = new Hono()
+// ** import routes
+import { routes } from "@/routers/index.ts";
 
-app.get('/', (c) => c.text('Hello Deno!'))
+const app = new Hono();
 
-Deno.serve(app.fetch)
+app.get("/", (c) => c.text("Hello NextLayer⚡"));
+
+app.route("/api", routes);
+
+Deno.serve(app.fetch);

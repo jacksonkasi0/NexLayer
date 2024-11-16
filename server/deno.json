@@ -5,6 +5,8 @@
   "imports": {
     "@/":"./src/",
     "@hono/hono": "jsr:@hono/hono@^4.6.10",
-    "@std/assert": "jsr:@std/assert@1"
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.4.1",
+    "@std/assert": "jsr:@std/assert@1",
+    "zod": "npm:zod@^3.23.8"
   }
 }

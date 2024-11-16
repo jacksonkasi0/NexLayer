@@ -3,7 +3,9 @@
   "specifiers": {
     "jsr:@hono/hono@^4.6.10": "4.6.10",
     "jsr:@std/assert@1": "1.0.8",
-    "jsr:@std/internal@^1.0.5": "1.0.5"
+    "jsr:@std/internal@^1.0.5": "1.0.5",
+    "npm:@hono/zod-validator@~0.4.1": "0.4.1_hono@4.6.10_zod@3.23.8",
+    "npm:zod@^3.23.8": "3.23.8"
   },
   "jsr": {
     "@hono/hono@4.6.10": {
@@ -19,10 +21,27 @@
       "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
     }
   },
+  "npm": {
+    "@hono/zod-validator@0.4.1_hono@4.6.10_zod@3.23.8": {
+      "integrity": "sha512-I8LyfeJfvVmC5hPjZ2Iij7RjexlgSBT7QJudZ4JvNPLxn0JQ3sqclz2zydlwISAnw21D2n4LQ0nfZdoiv9fQQA==",
+      "dependencies": [
+        "hono",
+        "zod"
+      ]
+    },
+    "hono@4.6.10": {
+      "integrity": "sha512-IXXNfRAZEahFnWBhUUlqKEGF9upeE6hZoRZszvNkyAz/CYp+iVbxm3viMvStlagRJohjlBRGOQ7f4jfcV0XMGg=="
+    },
+    "zod@3.23.8": {
+      "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="
+    }
+  },
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@^4.6.10",
-      "jsr:@std/assert@1"
+      "jsr:@std/assert@1",
+      "npm:@hono/zod-validator@~0.4.1",
+      "npm:zod@^3.23.8"
     ]
   }
 }
