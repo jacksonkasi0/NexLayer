@@ -1,5 +1,7 @@
-export default {
-  fetch(request: Request): Response {
-    return new Response("Hello, world!⚡⚡");
-  },
-};
+import { Hono } from '@hono/hono'
+
+const app = new Hono()
+
+app.get('/', (c) => c.text('Hello Deno!'))
+
+Deno.serve(app.fetch)
