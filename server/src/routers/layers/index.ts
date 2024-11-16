@@ -8,7 +8,7 @@ import { zValidator } from "@hono/zod-validator";
 import { figmaNodeLayersSchema } from "@/validations/layers.ts";
 
 // ** import types
-import { LayerData } from "@/types/layers.ts";
+import { FigmaNodeLayers } from "@/types/layers.ts";
 
 // Define the environment type for Hono
 interface Env {
@@ -26,7 +26,7 @@ layersApi.post(
     try {
       // Explicitly cast the result to the expected type
       // @ts-ignore : type-error json
-      const figmaNodeLayers: LayerData[] = c.req.valid("json");
+      const figmaNodeLayers: FigmaNodeLayers = c.req.valid("json");
 
       return c.json(
         {

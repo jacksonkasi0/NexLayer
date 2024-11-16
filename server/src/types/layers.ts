@@ -10,3 +10,9 @@ export type LayerData = {
     fs?: number; // Font size (only for TEXT nodes)
     children?: LayerData[]; // Array of child layers
 };
+
+// Define TypeScript interface for the main schema
+export interface FigmaNodeLayers {
+    context: string; // Descriptive context about the Figma design
+    layers: LayerData[]; // Array of LayerData
+}
