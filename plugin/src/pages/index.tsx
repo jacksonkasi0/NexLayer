@@ -22,7 +22,7 @@ import notify from "@/lib/notify";
 
 // ** import types & enums
 import { FetchImageTrigger } from "@/types/enums";
-import { ExportCompleteHandler, FetchImageHandler } from "@/types/events";
+import { ExportCompleteHandler, FetchImageHandler, RenameNodesHandler } from "@/types/events";
 
 // ** import API functions
 import { analyzeImage, renameLayers } from "@/api/layersApi";
@@ -42,45 +42,7 @@ const Page = () => {
     }
   }
 
-  function handleGenerateContext() {
-    if (count === 0) {
-      notify.warn(
-        "No layers selected for context generation. Please select a layer.",
-      );
-      return;
-    }
-    const parentLayerId = layers[0]?.id; // Take the ID of the first (parent) layer in layers
-    if (parentLayerId) {
-      emit<FetchImageHandler>(
-        "FETCH_IMAGE",
-        parentLayerId,
-        FetchImageTrigger.GenerateContext,
-      ); // Emit request to export the selected node by parent ID
-    } else {
-      notify.warn("No parent layer found.");
-    }
-  }
-
-  async function handleRenameLayer() {
-    if (count === 0) {
-      notify.warn("No layers selected for renaming. Please select a layer.");
-      return;
-    }
-
-    try {
-      const response = await renameLayers({ context: contextValue, layers });
-      if (response.success) {
-        notify.success("Layers renamed successfully.");
-        console.log("Renamed layers:", response.data);
-      } else {
-        notify.warn("Failed to rename layers. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error in handleRenameLayer:", error);
-      notify.error("Failed to rename layers. See logs for details.");
-    }
-  }
-
+  
   const handleImageData = async (
     data: ImageData,
     trigger: FetchImageTrigger,
@@ -119,6 +81,49 @@ const Page = () => {
     }
   };
 
+
+  function handleGenerateContext() {
+    if (count === 0) {
+      notify.warn(
+        "No layers selected for context generation. Please select a layer.",
+      );
+      return;
+    }
+    const parentLayerId = layers[0]?.id; // Take the ID of the first (parent) layer in layers
+    if (parentLayerId) {
+      emit<FetchImageHandler>(
+        "FETCH_IMAGE",
+        parentLayerId,
+        FetchImageTrigger.GenerateContext,
+      ); // Emit request to export the selected node by parent ID
+    } else {
+      notify.warn("No parent layer found.");
+    }
+  }
+
+  async function handleRenameLayer() {
+    if (count === 0) {
+      notify.warn("No layers selected for renaming. Please select a layer.");
+      return;
+    }
+  
+    try {
+      const response = await renameLayers({ context: contextValue, layers });
+      if (response.success) {
+        notify.success("Layers renamed successfully.");
+        console.log("Renamed layers:", response.data);
+  
+        // Emit rename nodes event with renamed layers
+        emit<RenameNodesHandler>('RENAME_NODES', response.data);
+      } else {
+        notify.warn("Failed to rename layers. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error in handleRenameLayer:", error);
+      notify.error("Failed to rename layers. See logs for details.");
+    }
+  }
+  
   // ** Listen for received image data
   useEffect(() => {
     on<ExportCompleteHandler>("RECEIVE_IMAGE", handleImageData);
