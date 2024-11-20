@@ -25,3 +25,8 @@ export interface ExportCompleteHandler extends EventHandler {
   name: 'RECEIVE_IMAGE';
   handler: (data: ImageData, trigger: FetchImageTrigger) => void;
 }
+
+export interface RenameNodesHandler extends EventHandler {
+  name: 'RENAME_NODES';
+  handler: (nodes: Array<{ id: string; n: string }>) => void;
+}

@@ -4,9 +4,10 @@ import { emit, on, showUI } from '@create-figma-plugin/utilities';
 // ** import handlers
 import { fetchLayerStructure } from '@/core/fetch-layer-structure-handler';
 import { exportSelectedNode } from '@/core/export-selected-node';
+import { handleRenameNodes } from '@/core/rename-nodes';
 
 // ** import types
-import { FetchImageHandler, FetchLayerStructureHandler, NotificationHandler } from '@/types/events';
+import { FetchImageHandler, FetchLayerStructureHandler, NotificationHandler, RenameNodesHandler } from '@/types/events';
 
 
 export default function () {
@@ -51,7 +52,7 @@ on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
       message = `⚠️ ${message}`;
       break;
     case 'error':
-      message = `✘ ${message}`;
+      message = `❌ ${message}`;
       options.error = true; // Use Figma's error style
       break;
     case 'loading':
@@ -66,4 +67,16 @@ on<NotificationHandler>('NOTIFY', (message, type, timeout = 3000) => {
 // ** Image Export Handler **
 on<FetchImageHandler>('FETCH_IMAGE', async (nodeId, trigger) => {
   await exportSelectedNode(nodeId, trigger);  // Trigger image export
+});
+
+
+// ** Rename Nodes Handler **
+on<RenameNodesHandler>('RENAME_NODES', (nodes) => {
+  try {
+    handleRenameNodes(nodes);
+    figma.notify(`✔️ Successfully renamed ${nodes.length} nodes.`);
+  } catch (error) {
+    console.error("Error renaming nodes:", error);
+    figma.notify("❌ Failed to rename nodes.", { error: true });
+  }
 });
