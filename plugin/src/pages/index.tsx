@@ -88,11 +88,11 @@ const Page = () => {
           />
         </Stack>
 
-        <Button fullWidth onClick={handleGenerateContext}>
+        <Button fullWidth onClick={handleGenerateContext} disabled={!!contextValue}>
           Auto Generate Context
         </Button>
 
-        <Button fullWidth onClick={handleRenameLayer}>
+        <Button fullWidth onClick={handleRenameLayer} disabled={!contextValue}>
           Rename {count} Layer{count !== 1 ? 's' : ''}
         </Button>
       </Stack>
