@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload Test</title>
+</head>
+<body>
+  <h1>Upload Image Files</h1>
+  <form id="uploadForm" enctype="multipart/form-data" method="POST">
+    <label for="files">Choose image files:</label>
+    <input type="file" id="files" name="file[]" accept=".png, .jpg, .jpeg, .webp" multiple>
+    <button type="submit">Upload</button>
+  </form>
+
+  <pre id="response"></pre>
+
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const responseEl = document.getElementById('response');
+
+    uploadForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent default form submission
+
+      const formData = new FormData(uploadForm);
+
+      try {
+        const response = await fetch('http://localhost:8000/api/vision/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+        responseEl.textContent = JSON.stringify(result, null, 2);
+      } catch (error) {
+        responseEl.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
