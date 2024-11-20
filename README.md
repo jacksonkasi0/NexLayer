@@ -1,13 +1,22 @@
 
 # NexLayer
 
-NexLayer is a Figma plugin designed to enhance your design workflow by automatically renaming layers using AI. This ensures a more organized and efficient design process.
+Discover **NexLayer**, the AI-driven Figma plugin that transforms how designers manage layers. Powered by **SambaNova's lightning-fast Llama-3.2-11B-Vision-Instruct** and **Meta-Llama-3.1-8B-Instruct** models, NexLayer intelligently analyzes Figma designs and provides context-based layer renaming with ease.  
 
-## Features
+## ✨ **Key Features:**  
+✅ AI-driven layer renaming based on design context  
+✅ Lightning-fast processing with **SambaNova LLMs**  
+✅ Built using Deno.js, Preact, Nanostores, and the Figma Plugin API  
+✅ Seamless integration with Figma for intuitive design workflows  
 
-- **AI-Powered Renaming**: Automatically assigns meaningful names to your Figma layers.
-- **Improved Organization**: Helps maintain a clean and structured layer hierarchy.
-- **Seamless Integration**: Easily integrates into your existing Figma projects.
+## 🔧 **Technologies Used:**  
+- Deno.js v2
+- Preact  
+- Nanostores  
+- SambaNova Llama Models  
+- OpenAI SDK  
+- Figma Plugin API & Utilities  
+- TypeScript & Zod
 
 ## Installation
 
