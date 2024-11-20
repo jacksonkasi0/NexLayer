@@ -1,10 +1,4 @@
-import OpenAI from "openai";
-
-// Initialize OpenAI SDK
-const client = new OpenAI({
-    apiKey: Deno.env.get("SAMBANOVA_API_KEY"),
-    baseURL: "https://api.sambanova.ai/v1",
-});
+import { llm_client } from "@/config/llm.ts";
 
 interface RenameLayersInput {
     context: string;
@@ -65,7 +59,7 @@ export const renameLayersUsingAI = async (input: RenameLayersInput): Promise<Ren
     `;
 
         try {
-            const completion = await client.chat.completions.create({
+            const completion = await llm_client.chat.completions.create({
                 model: "Meta-Llama-3.1-8B-Instruct",
                 messages: [{ role: "user", content: prompt }],
             });
