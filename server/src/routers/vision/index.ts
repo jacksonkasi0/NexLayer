@@ -1,5 +1,8 @@
 import { Hono } from "@hono/hono";
 
+// ** import utils
+import { analyzeFigmaFrameDesign } from "@/utils/llm/figma-ocr.ts";
+
 export const visionApi = new Hono();
 
 visionApi.post("/upload", async (c) => {
@@ -21,24 +24,27 @@ visionApi.post("/upload", async (c) => {
       );
     }
 
-    // Log file details
-    fileList.forEach((file, index) => {
-      if (file instanceof File) {
-        console.log(`File #${index + 1}:`, {
-          name: file.name,
-          type: file.type,
-          size: file.size,
-        });
-      } else {
-        console.warn(`File #${index + 1} is not a valid File object.`);
-      }
-    });
+    // Validate all inputs are files
+    const validFiles = fileList.filter((file): file is File => file instanceof File);
+
+    if (!validFiles.length) {
+      return c.json(
+        {
+          success: false,
+          message: "No valid image files found.",
+        },
+        400
+      );
+    }
+
+    // Call the Figma OCR utility
+    const analysisResponse = await analyzeFigmaFrameDesign({ files: validFiles });
 
     return c.json(
       {
         success: true,
-        message: "Files received successfully.",
-        fileCount: fileList.length,
+        message: "Files analyzed successfully.",
+        data: analysisResponse,
       },
       200
     );
@@ -47,7 +53,7 @@ visionApi.post("/upload", async (c) => {
     return c.json(
       {
         success: false,
-        message: "Error processing file upload.",
+        message: "Error processing file upload and analysis.",
         error: error instanceof Error ? error.message : "Unknown error",
       },
       500
