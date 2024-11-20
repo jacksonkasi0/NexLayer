@@ -9,4 +9,4 @@ export interface LayerData {
     fs?: number; // Font size (only for TEXT nodes)
     children?: LayerData[]; // Array of child layers
   }
-  
+ 
