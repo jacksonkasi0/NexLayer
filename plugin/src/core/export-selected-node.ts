@@ -7,9 +7,8 @@ import { FetchImageTrigger } from '@/types/enums';
 import { ExportCompleteHandler } from '@/types/events';
 
 export const exportSelectedNode = async (nodeId: string, trigger: FetchImageTrigger) => {
-
   try {
-    const node = figma.getNodeById(nodeId) as SceneNode;
+    const node = (await figma.getNodeByIdAsync(nodeId)) as SceneNode;
     if (!node) throw new Error(`Node with ID ${nodeId} not found`);
 
     const exportSettings: ExportSettingsImage = {
