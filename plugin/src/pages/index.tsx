@@ -35,6 +35,10 @@ const Page = () => {
   const [contextValue, setContextValue] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // ** Button Loading States
+  const [isGeneratingContext, setIsGeneratingContext] = useState(false);
+  const [isRenamingLayers, setIsRenamingLayers] = useState(false);
+
   // ** Event Handlers
   function handleInput() {
     if (textareaRef.current) {
@@ -42,12 +46,7 @@ const Page = () => {
     }
   }
 
-  
-  const handleImageData = async (
-    data: ImageData,
-    trigger: FetchImageTrigger,
-  ) => {
-    
+  const handleImageData = async (data: ImageData, trigger: FetchImageTrigger) => {
     if (trigger === FetchImageTrigger.RenameLayer) {
       console.log("Rename Layer clicked");
     } else {
@@ -68,7 +67,10 @@ const Page = () => {
       });
       formData.append("file", blob, `${data.nodeName}.jpg`);
 
+      setIsGeneratingContext(true);
       const response = await analyzeImage(formData);
+      setIsGeneratingContext(false);
+
       if (response.success) {
         setContextValue(response.data.content); // Update contextValue with API response
         notify.success("Context generated successfully.");
@@ -77,10 +79,10 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Error in handleGenerateContext:", error);
+      setIsGeneratingContext(false);
       notify.error("Failed to generate context. See logs for details.");
     }
   };
-
 
   function handleGenerateContext() {
     if (count === 0) {
@@ -106,24 +108,28 @@ const Page = () => {
       notify.warn("No layers selected for renaming. Please select a layer.");
       return;
     }
-  
+
     try {
+      setIsRenamingLayers(true);
       const response = await renameLayers({ context: contextValue, layers });
+      setIsRenamingLayers(false);
+
       if (response.success) {
         notify.success("Layers renamed successfully.");
         console.log("Renamed layers:", response.data);
-  
+
         // Emit rename nodes event with renamed layers
-        emit<RenameNodesHandler>('RENAME_NODES', response.data);
+        emit<RenameNodesHandler>("RENAME_NODES", response.data);
       } else {
         notify.warn("Failed to rename layers. Please try again.");
       }
     } catch (error) {
       console.error("Error in handleRenameLayer:", error);
+      setIsRenamingLayers(false);
       notify.error("Failed to rename layers. See logs for details.");
     }
   }
-  
+
   // ** Listen for received image data
   useEffect(() => {
     on<ExportCompleteHandler>("RECEIVE_IMAGE", handleImageData);
@@ -148,13 +154,19 @@ const Page = () => {
 
         <Button
           fullWidth
-          disabled={!!contextValue}
+          disabled={!!contextValue || isGeneratingContext}
           onClick={handleGenerateContext}
+          loading={isGeneratingContext}
         >
           Auto Generate Context
         </Button>
 
-        <Button fullWidth disabled={!contextValue} onClick={handleRenameLayer}>
+        <Button
+          fullWidth
+          disabled={!contextValue || isRenamingLayers}
+          onClick={handleRenameLayer}
+          loading={isRenamingLayers}
+        >
           Rename {count} Layer{count !== 1 ? "s" : ""}
         </Button>
       </Stack>
